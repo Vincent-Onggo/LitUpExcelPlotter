@@ -1,11 +1,10 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib.dates as mdates
+from matplotlib.figure import Figure
 
-def plot_voltage_data(file_path, sheet_name, location, room, panel, parameter_line):
-    # Read the Excel file
-    df = pd.read_excel(file_path, sheet_name=sheet_name)
 
+def plot_voltage_data(df, canvas, location, room, panel, parameter_line):
     # Filter the data
     filtered_df = df[(df['Location'] == location) &
                      (df['Room'] == room) &
@@ -23,7 +22,8 @@ def plot_voltage_data(file_path, sheet_name, location, room, panel, parameter_li
     plot_df = clean_data(plot_df)
 
     # Plotting the data
-    plot_graph(plot_df)
+    plot_graph(plot_df, canvas)
+
 
 def clean_data(df):
     # Make a copy of the DataFrame to avoid SettingWithCopyWarning
@@ -33,7 +33,8 @@ def clean_data(df):
     df = df[df['Date'].str.contains('-')]
 
     # Replace ,, with . and then replace , with .
-    df.loc[:, "Voltage (L-L)"] = df["Voltage (L-L)"].str.replace(',,', '.', regex=False).str.replace(',', '.', regex=False)
+    df.loc[:, "Voltage (L-L)"] = df["Voltage (L-L)"].str.replace(',,', '.', regex=False).str.replace(',', '.',
+                                                                                                     regex=False)
 
     # Convert voltage values to numeric, handling errors
     df.loc[:, "Voltage (L-L)"] = pd.to_numeric(df["Voltage (L-L)"], errors='coerce')
@@ -43,14 +44,18 @@ def clean_data(df):
     print(df)
     return df
 
-def plot_graph(df):
+
+def plot_graph(df, canvas):
+    # Create a new figure
+    fig = Figure(figsize=(15, 10))
+    ax = fig.add_subplot(111)
+
     # Plotting the data
-    plt.figure(figsize=(15, 10))
-    plt.plot(df["Date"], df["Voltage (L-L)"], marker='o', linestyle='-', color='b')
-    plt.xlabel("Date")
-    plt.ylabel("Voltage (L-L)")
-    plt.title("Voltage across different dates")
-    plt.grid(True)
+    ax.plot(df["Date"], df["Voltage (L-L)"], marker='o', linestyle='-', color='b')
+    ax.set_xlabel("Date")
+    ax.set_ylabel("Voltage (L-L)")
+    ax.set_title("Voltage across different dates")
+    ax.grid(True)
 
     # Calculate mean, min, max values
     min_voltage = df["Voltage (L-L)"].min()
@@ -58,18 +63,21 @@ def plot_graph(df):
     mean_voltage = df["Voltage (L-L)"].mean()
 
     # Highlight min and max data points with different colors
-    plt.scatter(df["Date"].loc[df["Voltage (L-L)"] == min_voltage], min_voltage, color='red', s=300, label="Min Voltage")
-    plt.scatter(df["Date"].loc[df["Voltage (L-L)"] == max_voltage], max_voltage, color='green', s=300, label="Max Voltage")
+    ax.scatter(df["Date"].loc[df["Voltage (L-L)"] == min_voltage], min_voltage, color='red', s=300, label="Min Voltage")
+    ax.scatter(df["Date"].loc[df["Voltage (L-L)"] == max_voltage], max_voltage, color='green', s=300,
+               label="Max Voltage")
 
     # Add a legend for the main plot
-    plt.legend()
+    ax.legend()
 
     # Add a separate legend for min, max, and mean values
-    plt.figtext(0.15, 0.2, f"Min Voltage: {min_voltage:.2f}", color='red')
-    plt.figtext(0.15, 0.23, f"Max Voltage: {max_voltage:.2f}", color='green')
-    plt.figtext(0.15, 0.26, f"Mean Voltage: {mean_voltage:.2f}", color='blue')
+    fig.text(0.15, 0.2, f"Min Voltage: {min_voltage:.2f}", color='red')
+    fig.text(0.15, 0.23, f"Max Voltage: {max_voltage:.2f}", color='green')
+    fig.text(0.15, 0.26, f"Mean Voltage: {mean_voltage:.2f}", color='blue')
 
-    plt.gca().xaxis.set_major_locator(mdates.MonthLocator())  # Set major ticks to be every month
-    plt.xticks(rotation=45)
-    plt.tight_layout()
-    plt.show()
+    ax.xaxis.set_major_locator(mdates.MonthLocator())  # Set major ticks to be every month
+    fig.autofmt_xdate()
+
+    # Draw the plot on the Tkinter canvas
+    canvas.figure = fig
+    canvas.draw()
