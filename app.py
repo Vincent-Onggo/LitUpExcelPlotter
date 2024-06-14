@@ -60,7 +60,7 @@ def plot_data():
     parameter = parameter_var.get()
     # Call data with the loaded df and canvas
     try:
-        plot_data_across_dates(df, canvas, location, room, panel, parameter)
+        plot_data_across_dates(df, canvas, location, room, panel, parameter, label_frame)
     except Exception as e:
         show_error(f"Graph plotting failed: {e}")
 
@@ -140,6 +140,10 @@ panel_menu.pack(side=tk.LEFT, padx=5)
 tk.Label(control_frame, text="Parameter:").pack(side=tk.LEFT, padx=5)
 parameter_menu = tk.OptionMenu(control_frame, parameter_var, *parameter_options)
 parameter_menu.pack(side=tk.LEFT, padx=5)
+
+# Create a frame for labels
+label_frame = tk.Frame(window)
+label_frame.pack(side=tk.BOTTOM, fill=tk.X, padx=10, pady=10, anchor='se')
 
 # Run the main application loop
 window.mainloop()
