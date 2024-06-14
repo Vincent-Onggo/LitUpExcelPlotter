@@ -46,7 +46,7 @@ def clean_data(df, parameter_type):
 
 def plot_graph(df, canvas, parameter_type):
     # Create a new figure
-    fig = Figure(figsize=(15, 10))
+    fig = Figure(figsize=(25, 10))
     ax = fig.add_subplot(111)
 
     # Plotting the data

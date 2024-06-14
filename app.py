@@ -86,7 +86,7 @@ def show_error(message):
 
 # Create the main application window
 window = tk.Tk()
-window.title("Voltage Plotter")
+window.title("LitUp Excel Plotter")
 
 # Create a frame for buttons
 button_frame = tk.Frame(window)
