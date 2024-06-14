@@ -3,13 +3,17 @@ import pandas as pd
 import matplotlib.dates as mdates
 from matplotlib.figure import Figure
 
-
-def plot_voltage_data(df, canvas, location, room, panel, parameter_line):
+global location, room, panel, parameter_line
+def plot_data_across_dates(df, canvas, location_, room_, panel_, parameter_line_):
     # Filter the data
-    filtered_df = df[(df['Location'] == location) &
-                     (df['Room'] == room) &
-                     (df['Panel'] == panel) &
-                     (df['Parameter Line'] == parameter_line)]
+    location = location_
+    room = room_
+    panel = panel_
+    parameter_line = parameter_line_
+    filtered_df = df[(df['Location'] == location_) &
+                     (df['Room'] == room_) &
+                     (df['Panel'] == panel_) &
+                     (df['Parameter Line'] == parameter_line_)]
 
     # Assuming the dates are in columns and the structure is similar to the screenshot
     dates = filtered_df.columns[5:]  # Adjust index based on the structure of your Excel file
