@@ -60,15 +60,19 @@ def plot_graph(df, canvas, parameter_type):
     min_value = df[parameter_type].min()
     max_value = df[parameter_type].max()
     mean_value = df[parameter_type].mean()
+    print("Date: ", len(df["Date"]))
+    print("Values: ", len(df[parameter_type]))
 
+    # Print out the actual values of Date and parameter_type columns
+    print("Date values:", df["Date"].tolist())
+    print("parameter_type values:", df[parameter_type].tolist())
     # Highlight min and max data points with different colors
-    ax.scatter(df["Date"].loc[df[parameter_type] == min_value], min_value, color='red', s=300, label=f"Min {parameter_type}")
-    ax.scatter(df["Date"].loc[df[parameter_type] == max_value], max_value, color='green', s=300,
+    ax.scatter(df["Date"].loc[df[parameter_type] == min_value].iloc[:1], min_value, color='red', s=300, label=f"Min {parameter_type}")
+    ax.scatter(df["Date"].loc[df[parameter_type] == max_value].iloc[:1], max_value, color='green', s=300,
                label=f"Max {parameter_type}")
 
     # Add a legend for the main plot
     ax.legend()
-
     # Add a separate legend for min, max, and mean values
     fig.text(0.15, 0.2, f"Min {parameter_type}: {min_value:.2f}", color='red')
     fig.text(0.15, 0.23, f"Max {parameter_type}: {max_value:.2f}", color='green')
@@ -76,7 +80,6 @@ def plot_graph(df, canvas, parameter_type):
 
     ax.xaxis.set_major_locator(mdates.MonthLocator())  # Set major ticks to be every month
     fig.autofmt_xdate()
-
     # Draw the plot on the Tkinter canvas
     canvas.figure = fig
     canvas.draw()
