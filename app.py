@@ -21,7 +21,6 @@ def load_file():
             room_options = df["Room"].dropna().unique().tolist()
             panel_options = df["Panel"].dropna().unique().tolist()
             parameter_options = df["Parameter Line"].dropna().unique().tolist()
-            print(parameter_options)
             # Update the OptionMenus
             update_option_menus()
         except Exception as e:
