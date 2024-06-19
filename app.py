@@ -20,6 +20,13 @@ def load_file():
             room_options = df["Room"].dropna().unique().tolist()
             panel_options = df["Panel"].dropna().unique().tolist()
             parameter_options = df["Parameter Line"].dropna().unique().tolist()
+
+            # Add a null option to the dropdown options
+            location_options.insert(len(location_options), "")
+            room_options.insert(len(room_options), "")
+            panel_options.insert(len(panel_options), "")
+            parameter_options.insert(len(parameter_options), "")
+
             # Update the OptionMenus
             update_option_menus()
         except Exception as e:
@@ -32,10 +39,10 @@ def update_option_menus():
     panel_var1.set(panel_options[0] if panel_options else "")
     parameter_var1.set(parameter_options[0] if parameter_options else "")
 
-    location_var2.set(location_options[0] if location_options else "")
-    room_var2.set(room_options[0] if room_options else "")
-    panel_var2.set(panel_options[0] if panel_options else "")
-    parameter_var2.set(parameter_options[0] if parameter_options else "")
+    location_var2.set("")
+    room_var2.set("")
+    panel_var2.set("")
+    parameter_var2.set("")
 
     location_menu1['menu'].delete(0, 'end')
     room_menu1['menu'].delete(0, 'end')
