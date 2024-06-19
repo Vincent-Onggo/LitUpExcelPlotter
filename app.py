@@ -4,7 +4,7 @@ import pandas as pd
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from plotter import plot_data_across_dates
 import matplotlib.pyplot as plt
-
+from matplotlib import figure
 
 # Function to load the Excel file
 def load_file():

@@ -58,11 +58,12 @@ def plot_data_across_dates(df, canvas, filter_sets, label_frame):
     ax.xaxis.set_major_locator(mdates.MonthLocator())  # Set major ticks to be every month
     fig.autofmt_xdate()
 
-    # Draw the plot on the Tkinter canvas
-    canvas.draw()
-
     # Add a legend for the main plot
     ax.legend()
+
+    # Update canvas and label frame
+    canvas.draw()
+    label_frame.pack(side=tk.BOTTOM, fill=tk.X, padx=10, pady=10, anchor='se')
 
 
 def clean_data(df, parameter_type):
