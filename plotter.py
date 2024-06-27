@@ -15,14 +15,25 @@ def plot_data_across_dates(df, canvas, filter_sets, label_frame):
     for filters in filter_sets:
         if all(filters):  # Only proceed if none of the filters are null
             location_, room_, panel_, parameter_line_ = filters
+            print(filters)
+
+            df['Location'] = df['Location'].astype(str).str.strip()
+            df['Room'] = df['Room'].astype(str).str.strip()
+            df['Panel'] = df['Panel'].astype(str).str.strip()
+            df['Parameter Line'] = df['Parameter Line'].astype(str).str.strip()
 
             # Filter the data
-            filtered_df = df[(df['Location'] == location_) &
-                             (df['Room'] == room_) &
-                             (df['Panel'] == panel_) &
-                             (df['Parameter Line'] == parameter_line_)]
+            filtered_df = df[(df['Location'] == location_.strip()) &
+                             (df['Room'] == room_.strip()) &
+                             (df['Panel'] == panel_.strip()) &
+                             (df['Parameter Line'] == parameter_line_.strip())]
+
+            # Debugging prints to check filtered data
+            print("Filtered DataFrame:")
+            print(filtered_df)
 
             if filtered_df.empty:
+                print("No data for the selected filters.")
                 continue
 
             # Assuming the dates are in columns and the structure is similar to the screenshot
@@ -59,7 +70,9 @@ def plot_data_across_dates(df, canvas, filter_sets, label_frame):
     fig.autofmt_xdate()
 
     # Add a legend for the main plot
-    ax.legend()
+    handles, labels = ax.get_legend_handles_labels()
+    if handles and labels:
+        ax.legend(handles, labels)
 
     # Update canvas and label frame
     canvas.draw()
@@ -69,17 +82,19 @@ def plot_data_across_dates(df, canvas, filter_sets, label_frame):
 def clean_data(df, parameter_type):
     # Make a copy of the DataFrame to avoid SettingWithCopyWarning
     df = df.copy()
+    print(df)
 
     # Remove any rows where the date is not in the expected format
     df = df[df['Date'].str.contains('-')]
-
+    print(1)
     # Replace ,, with . and then replace , with .
-    df.loc[:, parameter_type] = df[parameter_type].str.replace(',,', '.', regex=False).str.replace(',', '.',
-                                                                                                   regex=False)
-
+    df.loc[:, parameter_type] = df[parameter_type].astype(str).str.replace(',,', '.', regex=False).str.replace(',', '.',
+                                                                                                               regex=False)
+    print(2)
     # Convert values to numeric, handling errors
     df.loc[:, parameter_type] = pd.to_numeric(df[parameter_type], errors='coerce')
-
+    print(3)
     # Drop rows with NaN values in the parameter column
     df.dropna(subset=[parameter_type], inplace=True)
+    print(df)
     return df
