@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 # Function to load the Excel file
 def load_file():
     global df, location_options, room_options, panel_options, parameter_options
-    # file_path = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx"), ("All files", "*.*")])
-    file_path = "data.xlsx"
+    file_path = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx"), ("All files", "*.*")])
+    # file_path = "data.xlsx"
     if file_path:
         try:
             df = pd.read_excel(file_path)
@@ -79,7 +79,6 @@ def plot_data():
     panel1 = panel_var1.get()
     parameter1 = parameter_var1.get()
 
-    print(location1, room1, panel1, parameter1)
 
     location2 = location_var2.get()
     room2 = room_var2.get()
@@ -90,7 +89,6 @@ def plot_data():
         plot_data_across_dates(df, canvas,
                                [(location1, room1, panel1, parameter1), (location2, room2, panel2, parameter2)],
                                label_frame)
-        print("Plotted")
     except Exception as e:
         show_error(f"Graph plotting failed: {e}")
 
