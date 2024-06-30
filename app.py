@@ -32,7 +32,9 @@ def load_file():
         except Exception as e:
             show_error(f"Failed to load file: {e}")
 
-
+# Function to handle the Enter key press
+def enter_key(event):
+    plot_data()
 def update_option_menus():
     location_var1.set(location_options[0] if location_options else "")
     room_var1.set(room_options[0] if room_options else "")
@@ -115,6 +117,9 @@ def show_error(message):
 # Create the main application window
 window = tk.Tk()
 window.title("LitUp Excel Plotter")
+
+# Bind the Enter key to the enter_key function
+window.bind('<Return>', enter_key)
 
 # Create a frame for buttons
 button_frame = tk.Frame(window)
